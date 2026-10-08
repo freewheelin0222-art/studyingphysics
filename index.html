@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>工学系技術者の基礎物理ノート</title>
+<meta name="description" content="素粒子・4つの力・光・原子核・ニュートリノ・重力まで。工学系技術者が基礎物理をたどり直すための学習ノート。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --water:#0e2a3f;
+  --water-deep:#081d2c;
+  --cherenkov:#4fc3e8;
+  --pmt:#c8a24b;
+  --paper:#f3f6f8;
+  --card:#ffffff;
+  --ink:#13232f;
+  --muted:#566977;
+  --rule:#d3dde4;
+  --serif:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --sans:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#0f1c26;
+    --card:#152733;
+    --ink:#e3ebf0;
+    --muted:#9db0bd;
+    --rule:#2a3f4d;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:17px;line-height:1.9;
+  -webkit-text-size-adjust:100%;
+}
+a{color:inherit;text-decoration-color:var(--cherenkov);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:3px solid var(--cherenkov);outline-offset:3px;border-radius:2px}
+
+/* ---------- Hero: the inside of the tank ---------- */
+.hero{
+  position:relative;overflow:hidden;
+  background:radial-gradient(ellipse at 70% 40%, var(--water) 0%, var(--water-deep) 75%);
+  color:#eaf4f8;min-height:min(88vh,760px);display:flex;align-items:flex-end;
+}
+.hero svg{position:absolute;inset:0;width:100%;height:100%}
+.hero-text{position:relative;z-index:1;padding:0 6vw 9vh;max-width:46rem}
+.hero h1{
+  font-family:var(--serif);font-weight:800;
+  font-size:clamp(2.1rem,5.4vw,4rem);line-height:1.25;margin:0 0 1.2rem;
+  letter-spacing:.02em;
+}
+.hero p{margin:0;color:#b8d0dc;max-width:34em;font-size:1.02rem}
+.hero .caption{margin-top:2rem;font-size:.82rem;color:#7f9cad}
+
+/* ---------- Layout ---------- */
+.layout{max-width:76rem;margin:0 auto;padding:0 6vw}
+@media (min-width:1000px){
+  .layout{display:grid;grid-template-columns:15rem minmax(0,1fr);gap:4rem;padding:0 3rem}
+}
+nav.toc{padding:3rem 0 0}
+@media (min-width:1000px){
+  nav.toc{position:sticky;top:0;align-self:start;max-height:100vh;overflow:auto;padding:4rem 0 2rem}
+}
+nav.toc h2{font-family:var(--serif);font-size:1.05rem;margin:0 0 .8rem}
+nav.toc ol{list-style:none;margin:0;padding:0;font-size:.9rem;line-height:1.6}
+nav.toc li{margin:0 0 .55rem}
+nav.toc a{text-decoration:none;color:var(--muted);display:block}
+nav.toc a:hover,nav.toc a.active{color:var(--ink)}
+nav.toc a.active{box-shadow:inset 3px 0 0 var(--pmt);padding-left:.7rem}
+nav.toc .sub{margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--rule)}
+
+main{min-width:0;padding-bottom:6rem}
+main > section{max-width:42rem;padding-top:4.5rem}
+h2.chapter{
+  font-family:var(--serif);font-weight:800;font-size:clamp(1.6rem,3.2vw,2.15rem);
+  line-height:1.4;margin:0 0 1.6rem;
+}
+h2.chapter .num{display:block;font-size:.95rem;font-weight:700;color:var(--pmt);margin-bottom:.3rem;letter-spacing:.08em}
+h3{font-family:var(--serif);font-weight:700;font-size:1.22rem;margin:2.6rem 0 .6rem;line-height:1.5}
+p{margin:0 0 1.1rem}
+strong{font-weight:700}
+.lead{font-size:1.06rem;color:var(--muted)}
+
+/* Engineering column */
+aside.eng{
+  margin:2.4rem 0 0;padding:1.3rem 1.5rem;background:var(--card);
+  border-left:4px solid var(--pmt);
+}
+aside.eng h4{font-family:var(--serif);font-size:1rem;margin:0 0 .5rem}
+aside.eng p:last-child{margin-bottom:0}
+
+/* Figures */
+figure{margin:2rem 0;padding:1.2rem;background:var(--card);border:1px solid var(--rule)}
+figure svg{display:block;width:100%;height:auto}
+figcaption{font-size:.85rem;color:var(--muted);margin-top:.8rem;line-height:1.6}
+.fig-text{fill:var(--ink);font-family:var(--sans)}
+.fig-muted{fill:var(--muted);font-family:var(--sans)}
+
+/* Timeline */
+.timeline{list-style:none;margin:1.5rem 0 0;padding:0;border-left:2px solid var(--rule)}
+.timeline li{position:relative;display:grid;grid-template-columns:4.2rem 1fr;gap:1rem;padding:.55rem 0 .55rem 1.3rem;line-height:1.65}
+.timeline li::before{content:"";position:absolute;left:-6px;top:1.05rem;width:10px;height:10px;border-radius:50%;background:var(--paper);border:2px solid var(--muted)}
+.timeline li.key::before{background:var(--cherenkov);border-color:var(--cherenkov)}
+.timeline .y{font-family:var(--serif);font-weight:700}
+.timeline .d{font-size:.95rem}
+
+/* Standard model grid */
+.sm{display:grid;grid-template-columns:repeat(3,1fr) 1fr 1fr;gap:6px;margin:1.5rem 0 .5rem;font-size:.85rem;line-height:1.35}
+.sm div{padding:.6rem .4rem;text-align:center;background:var(--paper);border:1px solid var(--rule)}
+.sm b{display:block;font-family:var(--serif);font-size:1.25rem;margin-bottom:.15rem}
+.sm .q{border-top:3px solid #b56b8a}
+.sm .l{border-top:3px solid var(--cherenkov)}
+.sm .g{border-top:3px solid var(--pmt)}
+@media (max-width:480px){.sm{font-size:.72rem}.sm b{font-size:1.05rem}}
+.sm .h{border-top:3px solid var(--muted);grid-row:span 2;display:flex;flex-direction:column;justify-content:center}
+.sm .everyday{outline:2px solid var(--ink);outline-offset:-2px}
+.legend{font-size:.82rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:.4rem 1.2rem}
+.legend span::before{content:"";display:inline-block;width:.8rem;height:3px;margin-right:.35rem;vertical-align:middle}
+.legend .lq::before{background:#b56b8a}.legend .ll::before{background:var(--cherenkov)}
+.legend .lg::before{background:var(--pmt)}.legend .lh::before{background:var(--muted)}
+
+/* Tables */
+.table-wrap{overflow-x:auto;margin:1.5rem 0}
+table{border-collapse:collapse;width:100%;font-size:.92rem;line-height:1.6;min-width:30rem}
+th,td{text-align:left;padding:.6rem .7rem;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:700;font-family:var(--serif)}
+
+/* Glossary */
+dl.glossary{margin:1.5rem 0 0}
+dl.glossary dt{font-family:var(--serif);font-weight:700;margin-top:1.1rem}
+dl.glossary dd{margin:.2rem 0 0;color:var(--muted);font-size:.95rem}
+
+.info{background:var(--card);border:1px solid var(--rule);padding:1.2rem 1.4rem;margin:1.5rem 0}
+.info p:last-child{margin-bottom:0}
+.note{font-size:.85rem;color:var(--muted)}
+
+footer{border-top:1px solid var(--rule);padding:2rem 6vw 3rem;font-size:.85rem;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <svg id="tank" aria-hidden="true" preserveAspectRatio="xMidYMid slice"></svg>
+  <div class="hero-text">
+    <h1>工学系技術者の<br>基礎物理ノート</h1>
+    <p>送電線の電気も、スマホの充電も、太陽のぬくもりも、たどっていくと数種類の素粒子と4つの力に行き着きます。設備屋の目線で、物質のいちばん奥から宇宙の謎までを順にたどり直すノートです。</p>
+    <p class="caption">背景はスーパーカミオカンデの内壁に並ぶ光電子増倍管と、ニュートリノが残すチェレンコフ光のリングのイメージです。</p>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc" aria-label="目次">
+    <h2>目次</h2>
+    <ol>
+      <li><a href="#timeline">物理の歴史年表</a></li>
+      <li><a href="#ch1">第1章 物質は何でできているか</a></li>
+      <li><a href="#ch2">第2章 4つの力と「キャッチボール」</a></li>
+      <li><a href="#ch3">第3章 光と光子</a></li>
+      <li><a href="#ch4">第4章 身の回りの現象を素粒子でたどる</a></li>
+      <li><a href="#ch5">第5章 原子核のエネルギー</a></li>
+      <li><a href="#ch6">第6章 ニュートリノ：幽霊粒子</a></li>
+      <li><a href="#ch7">第7章 見えないものを観測する技術</a></li>
+      <li><a href="#ch8">第8章 重力と未解決問題</a></li>
+    </ol>
+    <ol class="sub">
+      <li><a href="#appA">付録A 用語集</a></li>
+      <li><a href="#appB">付録B 見学記：戸塚洋二ニュートリノ館</a></li>
+      <li><a href="#appC">付録C 次に行きたい場所</a></li>
+      <li><a href="#appD">付録D 関連ノート</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+<!-- ================= 年表 ================= -->
+<section id="timeline">
+  <h2 class="chapter">物理の歴史年表</h2>
+  <p class="lead">このノートに登場する発見を時系列に並べました。色の付いた点は、ニュートリノと日本の実験に関わる出来事です。</p>
+  <ol class="timeline">
+    <li><span class="y">1687</span><span class="d">ニュートンが万有引力の法則を発表</span></li>
+    <li><span class="y">1897</span><span class="d">J・J・トムソンが電子を発見（最初に見つかった素粒子）</span></li>
+    <li><span class="y">1905</span><span class="d">アインシュタインが光量子仮説（光電効果の説明）と特殊相対性理論を発表。E=mc²もこの年</span></li>
+    <li><span class="y">1915</span><span class="d">アインシュタインが一般相対性理論を発表。重力は時空のゆがみだと説明</span></li>
+    <li class="key"><span class="y">1930</span><span class="d">パウリがベータ崩壊の謎を説明するため、見えない粒子（のちのニュートリノ）を予言</span></li>
+    <li><span class="y">1932</span><span class="d">チャドウィックが中性子を発見</span></li>
+    <li><span class="y">1938</span><span class="d">ウランの核分裂が発見される</span></li>
+    <li class="key"><span class="y">1956</span><span class="d">原子炉から出るニュートリノが実験で初めて捉えられる</span></li>
+    <li><span class="y">1964</span><span class="d">陽子や中性子がより小さな粒子（クォーク）でできているとする理論が提唱される</span></li>
+    <li class="key"><span class="y">1983</span><span class="d">岐阜県神岡で、陽子崩壊の探索を目的にカミオカンデが観測開始</span></li>
+    <li class="key"><span class="y">1987</span><span class="d">カミオカンデが超新星爆発のニュートリノを観測</span></li>
+    <li class="key"><span class="y">1996</span><span class="d">スーパーカミオカンデが観測開始</span></li>
+    <li class="key"><span class="y">1998</span><span class="d">スーパーカミオカンデが大気ニュートリノの振動を発見。ニュートリノに質量があることが判明</span></li>
+    <li class="key"><span class="y">1999</span><span class="d">K2K実験開始。つくばのKEKから神岡へ人工ニュートリノを発射（〜2004年）</span></li>
+    <li class="key"><span class="y">2002</span><span class="d">小柴昌俊さんがノーベル物理学賞を受賞</span></li>
+    <li class="key"><span class="y">2009</span><span class="d">発射地点を東海村のJ-PARCに移し、T2K実験へ</span></li>
+    <li><span class="y">2012</span><span class="d">CERNでヒッグス粒子を発見</span></li>
+    <li class="key"><span class="y">2015</span><span class="d">梶田隆章さんがノーベル物理学賞を受賞。同年、米LIGOが重力波を初観測</span></li>
+    <li class="key"><span class="y">2016</span><span class="d">富士市が道の駅富士川楽座に「戸塚洋二ニュートリノ館」を開設</span></li>
+    <li><span class="y">2020</span><span class="d">神岡の重力波望遠鏡KAGRAが観測開始</span></li>
+    <li class="key"><span class="y">20年代後半</span><span class="d">次世代のハイパーカミオカンデが観測開始予定</span></li>
+  </ol>
+</section>
+
+<!-- ================= 第1章 ================= -->
+<section id="ch1">
+  <h2 class="chapter"><span class="num">第1章</span>物質は何でできているか</h2>
+
+  <h3>分子から素粒子まで</h3>
+  <p>教科書で習ったとおり、分子は原子でできていて、原子は中心の原子核と、その周りの電子でできています。原子核はさらに陽子と中性子に分かれます。</p>
+  <p>その先があります。陽子と中性子は、<strong>クォーク</strong>という粒子が3個ずつ集まってできています。陽子は「アップクォーク2個＋ダウンクォーク1個」、中性子は「アップ1個＋ダウン2個」です。一方、電子はそれ以上分けられない素粒子そのものです。</p>
+
+  <figure>
+    <svg viewBox="0 0 640 230" role="img" aria-label="分子、原子、原子核、陽子、クォークへと入れ子になっていく物質の階層図">
+      <g fill="none" stroke-width="2">
+        <circle cx="70" cy="110" r="52" stroke="#566977"/>
+        <circle cx="210" cy="110" r="48" stroke="#566977"/>
+        <circle cx="350" cy="110" r="40" stroke="#c8a24b"/>
+        <circle cx="480" cy="110" r="34" stroke="#c8a24b"/>
+        <circle cx="595" cy="110" r="10" stroke="#b56b8a"/>
+      </g>
+      <g fill="#566977"><circle cx="48" cy="98" r="14" opacity=".35"/><circle cx="88" cy="96" r="14" opacity=".35"/><circle cx="70" cy="128" r="18" opacity=".5"/></g>
+      <circle cx="210" cy="110" r="8" fill="#c8a24b"/>
+      <circle cx="248" cy="88" r="4" fill="#4fc3e8"/><circle cx="178" cy="140" r="4" fill="#4fc3e8"/>
+      <g><circle cx="340" cy="100" r="11" fill="#c8a24b"/><circle cx="361" cy="104" r="11" fill="#566977" opacity=".6"/><circle cx="348" cy="122" r="11" fill="#c8a24b"/><circle cx="366" cy="124" r="11" fill="#566977" opacity=".6"/></g>
+      <g><circle cx="470" cy="100" r="9" fill="#b56b8a"/><circle cx="492" cy="102" r="9" fill="#b56b8a"/><circle cx="480" cy="122" r="9" fill="#b56b8a" opacity=".6"/></g>
+      <circle cx="595" cy="110" r="4" fill="#b56b8a"/>
+      <g stroke="#566977" stroke-width="1.5"><line x1="125" y1="110" x2="158" y2="110"/><line x1="262" y1="110" x2="306" y2="110"/><line x1="394" y1="110" x2="442" y2="110"/><line x1="518" y1="110" x2="580" y2="110"/></g>
+      <g class="fig-text" font-size="14" text-anchor="middle">
+        <text x="70" y="190">分子</text><text x="210" y="190">原子</text><text x="350" y="190">原子核</text><text x="480" y="190">陽子・中性子</text><text x="595" y="190">クォーク</text>
+      </g>
+      <g class="fig-muted" font-size="11.5" text-anchor="middle">
+        <text x="70" y="210">約10⁻⁹ m</text><text x="210" y="210">約10⁻¹⁰ m</text><text x="350" y="210">約10⁻¹⁴ m</text><text x="480" y="210">約10⁻¹⁵ m</text><text x="595" y="210">大きさを測れない</text>
+      </g>
+    </svg>
+    <figcaption>物質の階層。原子を東京ドームの大きさに拡大しても、原子核はマウンド上のビー玉ほどしかありません。原子の中は、ほとんどが空っぽです。</figcaption>
+  </figure>
+
+  <h3>普段の物質は3種類の素粒子でできている</h3>
+  <p>身の回りの物質を作っているのは、<strong>アップクォーク、ダウンクォーク、電子</strong>の3種類だけです。机も、空気も、人間の体も、この3つの組み合わせです。</p>
+
+  <h3>標準模型の17種類</h3>
+  <p>ただし、素粒子はこの3種類だけではありません。現在の素粒子物理の理論である<strong>標準模型</strong>では、確認されている素粒子は全部で17種類です。</p>
+  <div class="sm" role="table" aria-label="標準模型の素粒子一覧">
+    <div class="q everyday"><b>u</b>アップ</div><div class="q"><b>c</b>チャーム</div><div class="q"><b>t</b>トップ</div><div class="g"><b>γ</b>光子</div><div class="h"><b>H</b>ヒッグス</div>
+    <div class="q everyday"><b>d</b>ダウン</div><div class="q"><b>s</b>ストレンジ</div><div class="q"><b>b</b>ボトム</div><div class="g"><b>g</b>グルーオン</div>
+    <div class="l everyday"><b>e</b>電子</div><div class="l"><b>μ</b>ミューオン</div><div class="l"><b>τ</b>タウ</div><div class="g"><b>Z</b>Z粒子</div><div style="visibility:hidden"></div>
+    <div class="l"><b>νe</b>電子ニュートリノ</div><div class="l"><b>νμ</b>ミューニュートリノ</div><div class="l"><b>ντ</b>タウニュートリノ</div><div class="g"><b>W</b>W粒子</div><div style="visibility:hidden"></div>
+  </div>
+  <p class="legend"><span class="lq">クォーク（6）</span><span class="ll">レプトン（6）</span><span class="lg">力を伝える粒子（4）</span><span class="lh">ヒッグス粒子（1）</span></p>
+  <p class="note">太枠が普段の物質を作る3種類です。</p>
+  <p>クォークのうち、アップとダウン以外の4種類は重くて不安定です。加速器や宇宙線の衝突で一瞬だけ生まれて、すぐ壊れます。レプトンのうち普段の物質に入っているのは電子だけで、ニュートリノは物質の部品ではなく、反応の瞬間に生まれて飛び去る粒子です。</p>
+
+  <h3>体重の99%はヒッグス粒子由来ではない</h3>
+  <p>ヒッグス粒子は「素粒子に質量を与える」役割を持っています。ところが、陽子の中のクォーク3個の質量を足しても、陽子全体の質量の1%程度にしかなりません。</p>
+  <p>残りの約99%は、グルーオンがクォークを猛烈な勢いで閉じ込めている、その運動と結合の<strong>エネルギー</strong>です。E=mc²によって、エネルギーが質量として振る舞っています。体重計に乗ったときの重さのほとんどは、原子核の奥で働く力のエネルギーなのです。</p>
+
+  <aside class="eng">
+    <h4>工学とのつながり</h4>
+    <p>材料工学で扱う性質、たとえば金属が電気を通す理由、半導体がスイッチになる理由、材料が硬い理由、錆びる理由は、ほぼすべて「原子の中の電子がどう振る舞うか」で決まっています。原子核やクォークの世界は、普段の材料の性質にはほとんど顔を出しません。電子の振る舞いから材料の性質を説明するバンド理論については、半導体ノートで扱っています。</p>
+  </aside>
+</section>
+
+<!-- ================= 第2章 ================= -->
+<section id="ch2">
+  <h2 class="chapter"><span class="num">第2章</span>4つの力と「キャッチボール」</h2>
+
+  <h3>自然界の力は4種類しかない</h3>
+  <p>摩擦力、弾性力、張力、浮力など、工学ではたくさんの力を扱います。しかし、根本までたどると、自然界の力は次の4種類しかありません。</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>力</th><th>伝える粒子</th><th>届く距離</th><th>主な働き</th></tr></thead>
+      <tbody>
+        <tr><td>重力</td><td>重力子（未発見）</td><td>無限</td><td>天体の運動、物の落下</td></tr>
+        <tr><td>電磁気力</td><td>光子</td><td>無限</td><td>電気、磁気、光、化学反応、摩擦</td></tr>
+        <tr><td>強い力</td><td>グルーオン</td><td>原子核の大きさ程度</td><td>クォークを閉じ込め、原子核をまとめる</td></tr>
+        <tr><td>弱い力</td><td>W粒子・Z粒子</td><td>原子核よりさらに短い</td><td>ベータ崩壊、太陽の核融合の一部</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>力は粒子のやりとりで伝わる</h3>
+  <p>素粒子物理では、力を「粒子同士が、力を伝える粒子をやりとりすること」として説明します。たとえば電子同士が反発するのは、光子をやりとりしているからです。2人がボートの上でボールを投げ合うと、反動で互いに離れていく。そんなイメージです。</p>
+
+  <h3>届く距離は、伝える粒子の質量で決まる</h3>
+  <p>光子は質量がゼロなので、電磁気力は宇宙の果てまで届きます。一方、W粒子とZ粒子は陽子の約90倍も重いため、弱い力はごく短い距離にしか届きません。重い粒子ほど遠くまで投げられない、と考えると覚えやすいです。</p>
+
+  <aside class="eng">
+    <h4>工学とのつながり</h4>
+    <p>重力を除くと、日常の現象はほぼすべて電磁気力です。摩擦は表面の原子同士の電気的な引き合い、弾性は原子間の結合、化学反応は電子の組み替え、燃焼の熱も電子のエネルギーの出入りです。設備で扱う力学・熱・電気は、ほとんどが同じ一つの力の別の顔だと言えます。</p>
+  </aside>
+</section>
+
+<!-- ================= 第3章 ================= -->
+<section id="ch3">
+  <h2 class="chapter"><span class="num">第3章</span>光と光子</h2>
+
+  <h3>電波からガンマ線まで、全部同じ光子</h3>
+  <p>光子は、電磁気力を伝える素粒子です。質量も電荷もなく、常に光速で飛びます。光は光子の流れそのものです。</p>
+  <p>電波、マイクロ波、赤外線、可視光、紫外線、X線、ガンマ線は、どれも同じ光子です。違うのは1個あたりのエネルギー（波長）だけです。Wi-Fiも電子レンジも、太陽の赤外線も、全部光子が運んでいます。</p>
+
+  <h3>粒であり、波でもある</h3>
+  <p>光子は粒として振る舞いながら、波としても振る舞います。干渉や回折は波の性質で説明でき、次に述べる光電効果は粒の性質でしか説明できません。どちらか一方ではなく両方の顔を持つのが、量子の世界の特徴です。</p>
+
+  <h3>光電効果とアインシュタイン</h3>
+  <p>金属に光を当てると、電子が飛び出します。これが光電効果です。光を波だと考えると、弱い光でも長く当てれば電子が出るはずですが、実際は違いました。光の色（波長）が一定より短くないと、どれだけ強く当てても電子は出ないのです。</p>
+  <p>アインシュタインは1905年、「光は決まったエネルギーを持つ粒の集まりで、粒1個が電子1個を叩き出す」と考えてこれを説明しました。彼のノーベル賞は、相対性理論ではなくこの研究に対して贈られています。そしてこの光電効果は、第7章の光電子増倍管の入口で起きている現象そのものです。</p>
+
+  <h3>チェレンコフ光：光を追い越す粒子が出す青い光</h3>
+  <p>真空中の光速は誰にも超えられません。ところが水の中では光が遅くなり、真空中の約75%の速さになります。高エネルギーの電子などは、この「水中の光速」を追い越すことができます。</p>
+  <p>このとき粒子は、進みながら青白い光を円錐状に放ちます。これが<strong>チェレンコフ光</strong>です。音速を超えた飛行機が衝撃波を出すのと同じで、いわば光の衝撃波です。水中での円錐の開き角は約42°です。原子炉の燃料プールが青く光って見えるのは、このチェレンコフ光です。</p>
+
+  <figure>
+    <svg viewBox="0 0 640 220" role="img" aria-label="水中を光より速く進む荷電粒子が円錐状のチェレンコフ光を出す様子">
+      <rect x="0" y="0" width="640" height="220" fill="#0e2a3f" rx="2"/>
+      <g stroke="#4fc3e8" stroke-width="1.5" opacity=".85">
+        <line x1="120" y1="110" x2="520" y2="-20"/><line x1="120" y1="110" x2="520" y2="240"/>
+        <line x1="200" y1="84" x2="232" y2="182" opacity=".5"/><line x1="280" y1="58" x2="330" y2="214" opacity=".5"/><line x1="360" y1="32" x2="420" y2="220" opacity=".5"/>
+      </g>
+      <line x1="40" y1="110" x2="560" y2="110" stroke="#c8a24b" stroke-width="2.5"/>
+      <circle cx="560" cy="110" r="6" fill="#c8a24b"/>
+      <g font-family="Zen Kaku Gothic New, sans-serif" font-size="13" fill="#eaf4f8">
+        <text x="470" y="98">荷電粒子</text>
+        <text x="300" y="138">粒子の進路</text>
+        <text x="420" y="40" fill="#4fc3e8">チェレンコフ光の波面</text>
+        <text x="40" y="200" fill="#9fbccb">粒子が水中の光速より速いと、光が後ろに円錐状に取り残される</text>
+      </g>
+    </svg>
+    <figcaption>チェレンコフ光の発生。船が水面に残すV字の波と同じ形です。この円錐が検出器の壁に当たると、光のリングとして映ります。</figcaption>
+  </figure>
+
+  <aside class="eng">
+    <h4>工学とのつながり</h4>
+    <p>光電効果は、光センサー、カメラの撮像素子、太陽光発電の基礎になっています。工場の光電センサーや画像検査も、光子が電子を動かす現象の応用です。</p>
+  </aside>
+</section>
+
+<!-- ================= 第4章 ================= -->
+<section id="ch4">
+  <h2 class="chapter"><span class="num">第4章</span>身の回りの現象を素粒子でたどる</h2>
+  <p class="lead">送電、ワイヤレス充電、太陽熱。どれも、主役は電子と光子です。</p>
+
+  <h3>送電：電子は遅く、エネルギーは電磁場が運ぶ</h3>
+  <p>電線の中で動いているのは電子ですが、電子自体はとても遅く、秒速1mmにも満たない速さでしか進みません。交流なら、その場で行ったり来たりしているだけです。</p>
+  <p>では何が一瞬で変電所から家まで届くのか。それは電線の周りにできる<strong>電磁場</strong>です。エネルギーは電線の「中」ではなく、電線の周りの空間を電磁場として伝わっていきます。電線はその通り道のガイド役です。そして電磁場を量子力学で見ると、その正体は光子の集まりです。</p>
+
+  <h3>変圧器とワイヤレス充電は同じ原理</h3>
+  <p>変圧器は、一次コイルに流した交流が作る変化する磁場で、二次コイルの電子を揺さぶって電流を起こします。これが電磁誘導です。</p>
+  <p>スマホのワイヤレス充電も同じです。充電台のコイルの磁場が、スマホ側のコイルに電流を起こします。変圧器の鉄心を取り払い、一次側と二次側を空間で分けたものがワイヤレス充電だと考えると分かりやすいでしょう。</p>
+
+  <h3>太陽の熱：中心から地球まで</h3>
+  <p>太陽の熱が地球に届くまでには、素粒子がほぼ総出演します。</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>段階</th><th>起きていること</th><th>主役</th></tr></thead>
+      <tbody>
+        <tr><td>太陽の中心</td><td>陽子同士が核融合してヘリウムになる。陽子が中性子に変わる反応でニュートリノが生まれる</td><td>クォーク、ニュートリノ</td></tr>
+        <tr><td>太陽の内部</td><td>核融合のエネルギーが光子になるが、吸収と再放出を繰り返し、表面に出るまで数万〜十数万年かかる</td><td>光子</td></tr>
+        <tr><td>宇宙空間</td><td>表面から出た光子が約8分20秒で地球に届く</td><td>光子</td></tr>
+        <tr><td>地表</td><td>光子のエネルギーが物質中の電子に吸収され、分子の振動、つまり熱になる</td><td>光子、電子</td></tr>
+        <tr><td>地球からの輻射</td><td>温まった地球が赤外線の光子を宇宙へ放出する</td><td>光子</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>同時に生まれたニュートリノは、太陽の中を素通りして約8分で地球に届きます。今浴びている日光は何万年も前に中心で生まれたエネルギーですが、ニュートリノは「今の太陽の中心」の情報を直接運んでくる、ほぼ唯一の手段です。</p>
+
+  <aside class="eng">
+    <h4>工学とのつながり</h4>
+    <p>受変電設備、モーター、誘導加熱、ワイヤレス給電は、すべて電磁誘導の応用です。輻射伝熱のステファン・ボルツマンの法則も、物体が放つ光子のエネルギーを数えた式です。設備で扱う電気と熱を素粒子レベルで見ると、同じ電磁気力の話に一本化されます。</p>
+  </aside>
+</section>
+
+<!-- ================= 第5章 ================= -->
+<section id="ch5">
+  <h2 class="chapter"><span class="num">第5章</span>原子核のエネルギー</h2>
+
+  <h3>E=mc²：消えた質量がエネルギーになる</h3>
+  <p>原子核が割れたりくっついたりすると、反応後の質量の合計が、反応前よりわずかに軽くなります。この消えた質量が、E=mc²に従ってエネルギーとして放出されます。光速cの2乗という巨大な数を掛けるので、ごくわずかな質量でも莫大なエネルギーになります。</p>
+  <p>燃焼などの化学反応は、原子の外側の電子の組み替え（電磁気力）です。核反応は、原子核そのものの組み替え（強い力）です。強い力のほうが桁違いに強いので、同じ重さの燃料で比べると、核反応のエネルギーは化学反応の100万倍のオーダーになります。</p>
+
+  <h3>核分裂と連鎖反応</h3>
+  <p>ウランのような重い原子核に中性子が当たると、原子核が二つに割れ、新しい中性子が2〜3個飛び出します。その中性子が次の原子核を割り、ねずみ算式に広がっていくのが連鎖反応です。</p>
+  <p>原子爆弾はこれを制御せずに一気に起こします。原子力発電は、制御棒などで中性子の数を調整して「1回の分裂から次の分裂がちょうど1回起きる」状態を保ち、熱を安定して取り出します。その熱で蒸気を作ってタービンを回すので、後半の設備は火力発電と同じです。</p>
+
+  <h3>核融合：太陽のエネルギー源</h3>
+  <p>逆に、軽い原子核同士をくっつけるのが核融合です。これも反応後に質量が少し減り、その分がエネルギーになります。太陽はこれで輝いています。</p>
+
+  <h3>ベータ崩壊：クォークの変身から粒子が生まれる</h3>
+  <p>原子核の外に出た中性子は、約15分で次のように壊れます。</p>
+  <p style="text-align:center;font-family:var(--serif);font-size:1.1rem">中性子 → 陽子 ＋ 電子 ＋ 反ニュートリノ</p>
+  <p>ここで出てくる電子や反ニュートリノは、もともと中性子の中に入っていたわけではありません。中性子の中のダウンクォーク1個がアップクォークに変わる瞬間に、弱い力によって新しく生まれます。箱から部品が出てくるのではなく、変身のエネルギーから粒子が作られる、というイメージです。</p>
+
+  <aside class="eng">
+    <h4>工学とのつながり</h4>
+    <p>発電方式を比べると、火力も原子力も最終的には「お湯を沸かしてタービンを回す」点で同じです。違うのは熱の出どころが電子の組み替えか、原子核の組み替えかという点で、そこにエネルギー密度の100万倍の差が生まれます。</p>
+  </aside>
+</section>
+
+<!-- ================= 第6章 ================= -->
+<section id="ch6">
+  <h2 class="chapter"><span class="num">第6章</span>ニュートリノ：幽霊粒子</h2>
+
+  <h3>予言から発見まで</h3>
+  <p>1930年頃、ベータ崩壊の前後でエネルギーの帳尻が合わないという問題がありました。パウリは「目に見えない粒子がエネルギーを持ち去っているはずだ」と予言します。それがニュートリノで、実際に見つかったのは26年後の1956年でした。</p>
+  <p>ニュートリノは電荷を持たず、質量も極めて小さく、他の物質とほとんど反応しません。地球すら素通りします。地球には太陽からのニュートリノだけで、1cm²あたり毎秒約660億個が降り注いでいて、私たちの体を毎秒何百兆個も通り抜けています。</p>
+
+  <h3>4つの発生源</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>発生源</th><th>生まれ方</th><th>関連する成果</th></tr></thead>
+      <tbody>
+        <tr><td>太陽</td><td>核融合の過程で生まれる</td><td>太陽の中心の様子を直接知る手段</td></tr>
+        <tr><td>大気</td><td>宇宙線が大気にぶつかって生まれる</td><td>梶田さんのニュートリノ振動の発見</td></tr>
+        <tr><td>超新星爆発</td><td>星の最期の大爆発で生まれる</td><td>カミオカンデの観測、小柴さんのノーベル賞</td></tr>
+        <tr><td>人工ビーム</td><td>加速器で作る</td><td>K2K・T2K実験</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>振動すると、なぜ質量があると言えるのか</h3>
+  <p>ニュートリノには電子・ミュー・タウの3種類があり、飛んでいるうちに別の種類に変わり、また戻ってきます。これが<strong>ニュートリノ振動</strong>です。</p>
+  <p>理由の一つ目は相対性理論です。質量ゼロの粒子は必ず光速で飛び、光速で飛ぶものにとっては時間が進みません。時間が流れなければ、途中で変化することもできません。飛行中に種類が変わるなら、時間が流れている、つまり質量がある、ということになります。</p>
+  <p>二つ目は量子力学です。たとえばミューニュートリノは、質量が少しずつ違う3つの状態が混ざり合ったものです。3つの状態はそれぞれ少しだけ違うリズムの波として進むので、飛ぶうちにずれが生じて混ざり具合が変わり、別の種類に見えるようになります。</p>
+
+  <figure>
+    <svg viewBox="0 0 640 200" role="img" aria-label="わずかに周波数の違う二つの波が重なって、振幅がゆっくり大きくなったり小さくなったりするうなりの図">
+      <path id="beat" fill="none" stroke="#4fc3e8" stroke-width="1.6"/>
+      <path id="env" fill="none" stroke="#c8a24b" stroke-width="1.6" stroke-dasharray="5 4"/>
+      <path id="env2" fill="none" stroke="#c8a24b" stroke-width="1.6" stroke-dasharray="5 4"/>
+      <g class="fig-muted" font-size="12.5">
+        <text x="20" y="190">飛行距離 →</text>
+        <text x="620" y="190" text-anchor="end">点線：種類の入れ替わりの周期</text>
+      </g>
+    </svg>
+    <figcaption>周波数が少しだけ違う二つの音を同時に鳴らすと生まれる「うなり」と同じ仕組みです。質量がすべてゼロ（または全部同じ）ならリズムはずれず、振動は起きません。</figcaption>
+  </figure>
+
+  <p>振動から分かるのは「質量の差」で、質量そのものの値はまだ分かっていません。電子のおよそ100万分の1以下という、とんでもない軽さであることだけが分かっています。</p>
+
+  <h3>質量があることは、なぜ大事なのか</h3>
+  <p>一つ目は、理論のほころびだからです。標準模型では、ニュートリノの質量はゼロとされていました。質量があったということは、標準模型の外側に未知の物理があるという確かな証拠です。しかも、他の素粒子より桁違いに軽い理由も分かっておらず、別の仕組みで質量を持っている可能性があります。</p>
+  <p>二つ目は、「なぜ宇宙に物質があるのか」という問題につながるからです。宇宙の始まりには物質と反物質が同じ量だけできたはずで、両者は出会うと消えてしまいます。それなのに物質がわずかに勝ち残り、星や地球や人間ができました。もしニュートリノと反ニュートリノで振動の仕方が違えば、それが物質が勝った理由の手がかりになるかもしれません。T2K実験とハイパーカミオカンデが、この問いに挑んでいます。</p>
+
+  <aside class="eng">
+    <h4>工学とのつながり</h4>
+    <p>ニュートリノそのものの工業利用は、まだ見えていません。研究段階の構想としては、原子炉から出るニュートリノで運転状況を外から監視する技術（核不拡散の査察用途）、地球内部から来るニュートリノで内部構造や発熱量を調べる研究、地球を素通りする性質を使った通信実験などがあります。ただ、どれも装置が巨大で、実用にはほど遠いのが現状です。</p>
+  </aside>
+</section>
+
+<!-- ================= 第7章 ================= -->
+<section id="ch7">
+  <h2 class="chapter"><span class="num">第7章</span>見えないものを観測する技術</h2>
+
+  <h3>観測はリレー形式</h3>
+  <p>ニュートリノはどんな装置も素通りするので、直接は捉えられません。観測は次のリレーで行います。</p>
+  <ol>
+    <li>ニュートリノが、タンクの水の中の電子や原子核にごくまれにぶつかる</li>
+    <li>弾き出された電子やミューオンが水中で光速を超え、チェレンコフ光を出す</li>
+    <li>その光子を光電子増倍管（PMT）が捉え、電気信号に増幅する</li>
+    <li>多数のPMTの信号から光のリングを再構成し、元のニュートリノの方向・エネルギー・種類を逆算する</li>
+  </ol>
+
+  <h3>光電子増倍管（PMT）：光子1個を100万倍にする</h3>
+  <p>チェレンコフ光は非常に弱く、PMT1本に光子が数個しか届かないこともあります。それを測れる大きさの電気信号に変えるのがPMTです。</p>
+  <figure>
+    <svg viewBox="0 0 640 230" role="img" aria-label="光子が光電面で電子を叩き出し、ダイノードで段階的に電子が増えていく光電子増倍管の模式図">
+      <path d="M40 40 Q20 115 40 190 L110 190 L110 40 Z" fill="none" stroke="#566977" stroke-width="2"/>
+      <path d="M44 48 Q28 115 44 182" fill="none" stroke="#c8a24b" stroke-width="4"/>
+      <path d="M0 115 l30 0" stroke="#4fc3e8" stroke-width="2.5" marker-end="url(#ah)"/>
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#4fc3e8"/></marker></defs>
+      <rect x="110" y="70" width="470" height="90" fill="none" stroke="#566977" stroke-width="2"/>
+      <g fill="#566977">
+        <rect x="150" y="130" width="34" height="8"/><rect x="210" y="92" width="34" height="8"/><rect x="270" y="130" width="34" height="8"/><rect x="330" y="92" width="34" height="8"/><rect x="390" y="130" width="34" height="8"/><rect x="450" y="92" width="34" height="8"/>
+        <rect x="530" y="100" width="10" height="30"/>
+      </g>
+      <polyline points="60,115 167,130 227,100 287,130 347,100 407,130 467,100 535,115" fill="none" stroke="#4fc3e8" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <g fill="#4fc3e8">
+        <circle cx="167" cy="122" r="3"/>
+        <circle cx="222" cy="108" r="3"/><circle cx="232" cy="108" r="3"/><circle cx="227" cy="116" r="3"/>
+        <circle cx="280" cy="122" r="2.6"/><circle cx="288" cy="120" r="2.6"/><circle cx="296" cy="122" r="2.6"/><circle cx="284" cy="114" r="2.6"/><circle cx="292" cy="113" r="2.6"/>
+      </g>
+      <g class="fig-text" font-size="13">
+        <text x="20" y="215">光電面</text><text x="250" y="60">ダイノード（段ごとに電圧が高くなる）</text><text x="520" y="60">陽極</text>
+      </g>
+      <g class="fig-muted" font-size="12">
+        <text x="0" y="100">光子</text><text x="160" y="185">1個</text><text x="218" y="185">約4個</text><text x="276" y="185">約16個</text><text x="380" y="185">…</text><text x="500" y="185">約10⁶〜10⁷個</text>
+      </g>
+    </svg>
+    <figcaption>PMTの仕組み。光電面で光電効果により電子が1個出て、ダイノードに当たるたびに3〜5倍に増えます。十数段で100万〜1000万倍になります。</figcaption>
+  </figure>
+  <p>設備の言葉でいえば、光子1個を入力にした多段カスケードアンプです。スーパーカミオカンデのPMTは直径約50cmの世界最大級で、静岡県浜松市の浜松ホトニクスが製造しています。</p>
+
+  <h3>スーパーカミオカンデ</h3>
+  <p>岐阜県飛騨市神岡町の地下約1000mにある、高さ約41m・直径約39mの円筒形タンクです。約5万トンの超純水を満たし、内壁に約1万1千本のPMTを並べています。</p>
+  <p>ニュートリノが水とぶつかる確率は極めて低いため、膨大な量の水を用意する確率勝負の作戦です。ぶつかって生まれたチェレンコフ光は、壁に光のリングとして映ります。リングの向きから飛んできた方向が、光の総量からエネルギーが、リングの縁のくっきり具合から粒子の種類が分かります。電子のリングは縁がぼやけ、ミューオンのリングはくっきりします。</p>
+
+  <h3>地下1000mに作る理由</h3>
+  <p>PMTは光子1個でも反応するほど敏感なので、外の光が少しでも入れば信号が埋もれてしまいます。タンクは完全な暗闇に保たれています。さらに地下深くに作るのは、宇宙から降ってくる他の粒子（宇宙線）を岩盤で遮るためです。ニュートリノだけは岩盤も地球も素通りして届きます。夜でも、地球の裏側から地球を貫いて太陽ニュートリノがやってきます。</p>
+
+  <h3>K2K・T2K実験：ニュートリノを地中に撃ち込む</h3>
+  <p>大気ニュートリノの振動を、人工のニュートリノで確かめたのがK2K実験（1999〜2004年）です。茨城県つくば市の高エネルギー加速器研究機構（KEK）で陽子を加速してアルミニウムの標的にぶつけ、生まれたパイ中間子が崩壊してできるミューニュートリノを、250km先の神岡に向けて地中を通して発射しました。地球が丸いので、ビームは水平より約1度下向きに撃ち出されます。</p>
+  <p>発射直後の前置検出器（標的から約300m）で数えたニュートリノの数と、スーパーカミオカンデに届いた数を比べると、届いた数が期待より少なくなっていました。途中で別の種類に変わった分が減った、と解釈できます。</p>
+  <p>2009年からは発射地点を茨城県東海村のJ-PARCに移し、約295km離れた神岡に向けたT2K実験として、より強力なビームで振動の全容解明に取り組んでいます。</p>
+
+  <aside class="eng">
+    <h4>工学とのつながり</h4>
+    <p>浜松ホトニクスは、カミオカンデのために巨大で高感度なPMTを開発した経験を経て、世界トップクラスの光センサーメーカーになりました。PMTや光検出技術は、医療用のPET検査装置、分析機器、放射線計測、半導体検査などに広く使われています。研究用の無茶な注文に応えた技術が、その後の産業を引っ張った典型例です。超純水を大量に長期間維持する技術や、微弱信号を雑音から取り出すデータ処理も、同じく基礎研究が磨いた技術です。</p>
+  </aside>
+</section>
+
+<!-- ================= 第8章 ================= -->
+<section id="ch8">
+  <h2 class="chapter"><span class="num">第8章</span>重力と未解決問題</h2>
+
+  <h3>一般相対性理論：重力は時空のゆがみ</h3>
+  <p>現在、重力をいちばん正確に説明しているのはアインシュタインの一般相対性理論です。そこでは重力は粒子のやりとりではなく、「質量が時空をゆがめ、そのゆがみに沿って物が動く」現象として描かれます。トランポリンの上に重い球を置くと周りがへこみ、小さな球がそこへ転がっていくイメージです。</p>
+
+  <h3>重力子：見つかっていない素粒子</h3>
+  <p>他の3つの力には、それを伝える素粒子があります。同じように考えると、重力にも<strong>重力子（グラビトン）</strong>があるはずだと予想されています。重力の特徴から逆算すると、次のような粒子のはずです。</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>重力の特徴</th><th>重力子に期待される性質</th></tr></thead>
+      <tbody>
+        <tr><td>宇宙の果てまで届く</td><td>質量ゼロ</td></tr>
+        <tr><td>常に引き合い、反発しない</td><td>光子とは違う回転の性質（スピン2）を持つ</td></tr>
+        <tr><td>光も重力で曲がる</td><td>電荷ではなく、質量やエネルギーを持つもの全部と結びつく</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>見つからない理由は、重力が4つの力の中で桁違いに弱いからです。陽子2個の間で比べると、重力は電磁気力の約10³⁶分の1しかありません。小さな磁石が地球全体の重力に逆らってクリップを持ち上げられることからも、その弱さが分かります。重力子1個を捉えるには、地球サイズの検出器でも足りないと言われています。</p>
+  <p>なお、「質量を与える」ヒッグス粒子は重力を伝える粒子ではありません。ヒッグス粒子は素粒子に質量を持たせる役割で、その質量同士が引き合う重力を伝えているわけではありません。</p>
+
+  <h3>量子重力理論</h3>
+  <p>日常レベルの弱い重力なら、重力子のやりとりで計算すると、ニュートンやアインシュタインの理論の結果がきちんと再現されます。ところが、ブラックホールの中心や宇宙が始まった瞬間のように重力が極端に強くなる場面では、計算の答えが無限大になって破綻します。他の3つの力ではこの問題を処理できたのに、重力だけはできません。</p>
+  <p>これを解決しようとしているのが、素粒子を点ではなく小さな弦だと考える超弦理論や、ループ量子重力理論です。ただ、どちらも実験で確かめる方法がまだ見つかっていません。</p>
+
+  <h3>重力波とKAGRA</h3>
+  <p>時空のゆがみが波として伝わる重力波は、2015年に米国のLIGOが初めて捉え、2017年のノーベル物理学賞になりました。日本の重力波望遠鏡KAGRAは、スーパーカミオカンデと同じ岐阜県神岡の地下に建設されています。ニュートリノと重力波という「とらえにくいもの」を、同じ山の地下で追いかけているわけです。</p>
+
+  <h3>これからの物理</h3>
+  <p>宇宙の物質の大半を占めるダークマターは、標準模型の17種類のどれでも説明できず、未知の素粒子があると考えられています。物質と反物質の非対称性も未解決です。次世代のハイパーカミオカンデは、スーパーカミオカンデの約8倍の有効体積を持つ検出器として、2020年代後半の観測開始を目指しています。</p>
+
+  <aside class="eng">
+    <h4>工学とのつながり</h4>
+    <p>素粒子が分かれば全部計算できる、というわけではありません。水分子1個の性質が完璧に分かっていても、そこから波の砕け方や天気を直接計算するのは事実上不可能です。粒子が大量に集まると、個々の粒子にはなかった新しい性質やルールが現れます（創発）。配管の流れをベルヌーイの式で考え、素粒子を持ち出さないのはこのためです。下へたどるほど単純になり、上へ積み上げるほど豊かになる。その両方を知っておくことが、基礎物理を学ぶ意味だと思います。</p>
+  </aside>
+</section>
+
+<!-- ================= 付録A ================= -->
+<section id="appA">
+  <h2 class="chapter"><span class="num">付録A</span>用語集</h2>
+  <dl class="glossary">
+    <dt>素粒子</dt><dd>それ以上分けられない、物質と力の最小単位。標準模型では17種類が確認されている。</dd>
+    <dt>クォーク</dt><dd>陽子や中性子を構成する素粒子。6種類あり、普段の物質に使われるのはアップとダウン。</dd>
+    <dt>レプトン</dt><dd>電子、ミューオン、タウと、3種類のニュートリノからなる素粒子のグループ。</dd>
+    <dt>標準模型</dt><dd>素粒子と、重力以外の3つの力を説明する現在の理論。</dd>
+    <dt>光子</dt><dd>電磁気力を伝える素粒子。光や電波などの電磁波の正体。</dd>
+    <dt>グルーオン</dt><dd>強い力を伝える素粒子。クォーク同士を結びつける。</dd>
+    <dt>W粒子・Z粒子</dt><dd>弱い力を伝える素粒子。重いため、弱い力はごく短い距離にしか届かない。</dd>
+    <dt>ヒッグス粒子</dt><dd>素粒子に質量を与える役割を持つ素粒子。2012年に発見。</dd>
+    <dt>重力子（グラビトン）</dt><dd>重力を伝えると予想されている未発見の素粒子。</dd>
+    <dt>ニュートリノ</dt><dd>電荷を持たず、ほとんど何とも反応しないレプトン。3種類あり、飛行中に種類が変わる。</dd>
+    <dt>ニュートリノ振動</dt><dd>ニュートリノが飛んでいるうちに別の種類に変わり、また戻る現象。質量がある証拠。</dd>
+    <dt>ベータ崩壊</dt><dd>中性子が陽子・電子・反ニュートリノに変わる反応。弱い力による。</dd>
+    <dt>核分裂・核融合</dt><dd>重い原子核が割れる反応と、軽い原子核がくっつく反応。どちらも質量の減少分がエネルギーになる。</dd>
+    <dt>光電効果</dt><dd>物質に光が当たって電子が飛び出す現象。光が粒であることを示した。</dd>
+    <dt>チェレンコフ光</dt><dd>荷電粒子が物質中の光速を超えて進むときに出す青白い光。</dd>
+    <dt>光電子増倍管（PMT）</dt><dd>光電効果と多段の電子増幅で、光子1個レベルの光を検出する光センサー。</dd>
+    <dt>一般相対性理論</dt><dd>重力を時空のゆがみとして説明するアインシュタインの理論。</dd>
+    <dt>重力波</dt><dd>時空のゆがみが波として光速で伝わる現象。2015年に初観測。</dd>
+    <dt>ダークマター</dt><dd>重力の影響から存在が分かっているが、正体不明の物質。</dd>
+    <dt>創発</dt><dd>多数の要素が集まったとき、個々の要素にはなかった性質が現れること。</dd>
+  </dl>
+</section>
+
+<!-- ================= 付録B ================= -->
+<section id="appB">
+  <h2 class="chapter"><span class="num">付録B</span>見学記：戸塚洋二ニュートリノ館</h2>
+  <p>このノートのきっかけは、東名高速の富士川サービスエリアで寄ろうとしたニュートリノ館が、閉館時間を過ぎていたことでした。</p>
+  <p>戸塚洋二博士は静岡県富士市出身の物理学者で、スーパーカミオカンデの建設と運用を率い、ニュートリノ振動の発見を導きました。梶田隆章さんの師にあたります。2008年に亡くなりましたが、ノーベル賞に最も近い人の一人と言われていました。富士市の名誉市民でもあり、その功績を伝えるために2016年に開設されたのがこの施設です。</p>
+  <div class="info">
+    <p><strong>場所</strong>　道の駅富士川楽座 2階（東名高速 富士川SA上り線からは3階で接続）</p>
+    <p><strong>開館時間</strong>　10:00〜16:00</p>
+    <p><strong>休館日</strong>　火曜日</p>
+    <p><strong>入場料</strong>　無料（隣接する体験館どんぶらは有料）</p>
+    <p class="note">2026年10月時点の公式サイトの情報です。訪問前に富士川楽座の公式サイトで最新情報を確認してください。</p>
+  </div>
+  <h3>主な展示</h3>
+  <p>戸塚博士の生涯と業績、スーパーカミオカンデの紹介、ノーベル賞とニュートリノ研究の紹介、光電子増倍管の実物展示などがあります。霧箱で見えない粒子の飛跡を観察したり、粒子加速器のシミュレーターを体験したりもできます。K2K長基線ニュートリノ振動実験のパネルでは、KEKから神岡までのビームラインの仕組みが、陽子シンクロトロンから前置検出器まで順に解説されています。</p>
+  <p>いちばんの見どころは、直径約50cmのPMTの実物です。第7章で説明したカスケード増幅の装置が、思っていたよりずっと大きなガラスの球だということが分かります。16時閉館なので、上り線を昼間に通るときに立ち寄るのがおすすめです。</p>
+</section>
+
+<!-- ================= 付録C ================= -->
+<section id="appC">
+  <h2 class="chapter"><span class="num">付録C</span>次に行きたい場所</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>施設</th><th>場所</th><th>見どころ</th></tr></thead>
+      <tbody>
+        <tr><td>ひだ宇宙科学館 カミオカラボ</td><td>岐阜県飛騨市</td><td>巨大な半円筒スクリーンで、スーパーカミオカンデの内部をフルCGで体験できる</td></tr>
+        <tr><td>日本科学未来館</td><td>東京都江東区</td><td>宇宙や素粒子に関する展示。スーパーカミオカンデの模型が展示されたこともある</td></tr>
+        <tr><td>KEK（高エネルギー加速器研究機構）</td><td>茨城県つくば市</td><td>K2K実験の出発点。展示施設で加速器と素粒子研究を紹介している</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">展示内容や公開日は変わることがあるため、訪問前に各施設の公式サイトで確認してください。</p>
+</section>
+
+<!-- ================= 付録D ================= -->
+<section id="appD">
+  <h2 class="chapter"><span class="num">付録D</span>関連ノート</h2>
+  <p>同じシリーズのノートです。</p>
+  <!-- 公開URLが決まったら、各項目を <a href="URL">…</a> で囲んでリンクにしてください -->
+  <ul>
+    <li>工学系技術者の半導体ノート：バンド理論など、電子の振る舞いから材料の性質を説明（第1章・第3章とつながる）</li>
+    <li>工学系技術者のAI学習ノート</li>
+    <li>工学系技術者の生物学習ノート</li>
+    <li>工学系技術者の映画学習ノート</li>
+    <li>工学系技術者の仏教学習ノート</li>
+  </ul>
+</section>
+
+  </main>
+</div>
+
+<footer>工学系技術者の基礎物理ノート</footer>
+
+<script>
+/* Hero: wall of PMTs with one Cherenkov ring lit */
+(function(){
+  var svg=document.getElementById('tank');
+  if(!svg) return;
+  var NS='http://www.w3.org/2000/svg', W=1600, H=900;
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  var step=46, r=17, cx=1080, cy=400, ringR=290, ringW=34;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var frag=document.createDocumentFragment(), lit=[];
+  for(var row=0, y=step/2; y<H+step; row++, y+=step*0.866){
+    for(var x=(row%2?step/2:0); x<W+step; x+=step){
+      var d=Math.abs(Math.hypot(x-cx,(y-cy)*1.12)-ringR);
+      var c=document.createElementNS(NS,'circle');
+      c.setAttribute('cx',x.toFixed(1)); c.setAttribute('cy',y.toFixed(1)); c.setAttribute('r',r);
+      c.setAttribute('fill','#c8a24b');
+      c.setAttribute('opacity','0.13');
+      if(d<ringW){
+        var k=1-d/ringW;
+        c.dataset.lit=(0.35+0.6*k).toFixed(2);
+        lit.push(c);
+      }
+      frag.appendChild(c);
+    }
+  }
+  svg.appendChild(frag);
+  lit.forEach(function(c){
+    c.setAttribute('fill','#4fc3e8');
+    if(reduce){ c.setAttribute('opacity',c.dataset.lit); return; }
+    c.style.transition='opacity 1.6s ease-out';
+    c.setAttribute('opacity','0.13');
+  });
+  if(!reduce){
+    requestAnimationFrame(function(){ setTimeout(function(){
+      lit.forEach(function(c){ c.setAttribute('opacity',c.dataset.lit); });
+    },400); });
+  }
+})();
+
+/* Beat figure for neutrino oscillation */
+(function(){
+  var b=document.getElementById('beat'), e1=document.getElementById('env'), e2=document.getElementById('env2');
+  if(!b) return;
+  var p='', a='', a2='', mid=90, amp=60;
+  for(var x=20; x<=620; x+=1.5){
+    var t=(x-20)/600;
+    var env=Math.cos(Math.PI*2*t*1.5);
+    var y=mid-amp*env*Math.sin(Math.PI*2*t*30);
+    p+=(x===20?'M':'L')+x.toFixed(1)+' '+y.toFixed(1);
+    a+=(x===20?'M':'L')+x.toFixed(1)+' '+(mid-amp*Math.abs(env)).toFixed(1);
+    a2+=(x===20?'M':'L')+x.toFixed(1)+' '+(mid+amp*Math.abs(env)).toFixed(1);
+  }
+  b.setAttribute('d',p); e1.setAttribute('d',a); e2.setAttribute('d',a2);
+})();
+
+/* Highlight current chapter in the table of contents */
+(function(){
+  if(!('IntersectionObserver' in window)) return;
+  var links={};
+  document.querySelectorAll('nav.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)]=a; });
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); });
+        if(links[en.target.id]) links[en.target.id].classList.add('active');
+      }
+    });
+  },{rootMargin:'-20% 0px -70% 0px'});
+  document.querySelectorAll('main > section').forEach(function(s){ io.observe(s); });
+})();
+</script>
+</body>
+</html>
